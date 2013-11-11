@@ -1,229 +1,124 @@
+{% extends "base.html" %}
+{% block content %}
 
-<!DOCTYPE html>
-<html>
-<head>
-	<title>ACTS in Honduras</title>
-	<meta charset="UTF-8" />
-
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-	<link rel="stylesheet" type="text/css" href="css/leaflet.css" />
-	<!--[if lte IE 8]><link rel="stylesheet" href="css/leaflet.ie.css" /><![endif]-->
-	<link rel="stylesheet" type="text/css" href="css/main.css" />
-	
-	<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
-	<script type="text/javascript" src="js/leaflet.js"></script>
-	<script type="text/javascript" src="js/HN_administrative_areas.js"></script>
-	<script type="text/javascript" src="js/HN_departments.js"></script>
-	<script type="text/javascript" src="js/HN_2007_MS_GPS.js"></script>
-	<script type="text/javascript" src="js/string_formats.js"></script>
-	<script type="text/javascript" src="js/load_table.js"></script>
-	<script type="text/javascript">
-		var geojson_admin, geojson_department;
-		
-		function admin_style(feature) {
-			return {
-				weight: 2,
-				opacity: .9,
-				color: 'white',
-				dashArray: '3',
-				fillOpacity: 0.1,
-				fillColor: 'blue'
-				//fillColor: '#003366'
-			};
-		}
-	    function department_style(feature) {
-			return {
-				weight: 4,
-				color: 'blue',
-				fill: false
-			};
-		}
-			
-		function highlightFeature(e) {
-			var layer = e.target;
-
-			layer.setStyle({
-				weight: 5,
-				color: '#CCCCCC',
-				dashArray: '',
-				fillOpacity: 0.1
-			});
-
-			if (!L.Browser.ie && !L.Browser.opera) {
-				layer.bringToFront();
-			}
-
-			info.update(layer.feature.properties);
-		}
-
-		function resetHighlight(e) {
-			geojson_admin.resetStyle(e.target);
-			info.update();
-		}
-
-		function zoomToFeature(e) {
-			map.fitBounds(e.target.getBounds());
-		}
-
-		function onEachFeature(feature, layer) {
-			layer.on({
-				mouseover: highlightFeature,
-				mouseout: resetHighlight,
-				click: (zoomToFeature, loadgrid)
-			});
-		}
-        function onEachWayPoint(feature, layer) {
-            // does this feature have a property named popupContent?
-            if (feature.properties && feature.properties.Label) {
-                layer.bindPopup(feature.properties.Label);
+    <div id="map"></div>
+    <script type="text/javascript">
+    
+        var MakiIcon12 = L.Icon.extend({
+            options: {
+                iconSize:     [12, 12],
+                popupAnchor:  [0, -5]
             }
-        }		
-    </script>
-	
-</head>
-<body>
-   <!-- Begin Wrapper -->
-   <div id="wrapper">
-   
-         <!-- Begin Header -->
-         <div id="header"> 
-         
-            <h1>ACTS in Honduras</h1>
-		 </div>
-		 <!-- End Header -->
-         <div id="map"></div>
-            <script type="text/javascript">
-            
-                var MakiIcon12 = L.Icon.extend({
-                    options: {
-                        iconSize:     [12, 12],
-                        popupAnchor:  [0, -5]
-                    }
-                });
-                var defaultIcon12 = new MakiIcon12({iconUrl: 'css/images/maki/marker-12.svg'});
-                var MakiIcon24 = L.Icon.extend({
-                    options: {
-                        iconSize:     [24, 24],
-                        popupAnchor:  [0, -10]
-                    }
-                });
-                var churchIcon24 = new MakiIcon24({iconUrl: 'css/images/maki/religious-christian-24.svg'});
-                var houseIcon24 = new MakiIcon24({iconUrl: 'css/images/maki/building-24.svg'});
-                var gasIcon24 = new MakiIcon24({iconUrl: 'css/images/maki/fuel-24.svg'});
-                var medicalIcon24 = new MakiIcon24({iconUrl: 'css/images/maki/hospital-24.svg', color: 'red'});
-                var routeIcon24 = new MakiIcon24({iconUrl: 'css/images/maki/triangle-stroked-24.svg'});
-                var schoolIcon24 = new MakiIcon24({iconUrl: 'css/images/maki/school-24.svg'});
-                var soccerIcon24 = new MakiIcon24({iconUrl: 'css/images/maki/soccer-24.svg'});
-                var supplyIcon24 = new MakiIcon24({iconUrl: 'css/images/maki/grocery-24.svg'});
-                var townIcon24 = new MakiIcon24({iconUrl: 'css/images/maki/village-24.svg'});
-                var waterRoadIcon24 = new MakiIcon24({iconUrl: 'css/images/maki/roadblock-24.svg'});
-                var waterIcon24 = new MakiIcon24({iconUrl: 'css/images/maki/water-24.svg'});
-
-                
-                
-                var map = L.map('map').setView([15.27623, -87.32515], 11);
+        });
+        var defaultIcon12 = new MakiIcon12({iconUrl: 'static/css/images/maki/marker-12.svg'});
+        var MakiIcon24 = L.Icon.extend({
+            options: {
+                iconSize:     [24, 24],
+                popupAnchor:  [0, -10]
+            }
+        });
+        var churchIcon24 = new MakiIcon24({iconUrl: 'static/css/images/maki/religious-christian-24.svg'});
+        var houseIcon24 = new MakiIcon24({iconUrl: 'static/css/images/maki/building-24.svg'});
+        var gasIcon24 = new MakiIcon24({iconUrl: 'static/css/images/maki/fuel-24.svg'});
+        var medicalIcon24 = new MakiIcon24({iconUrl: 'static/css/images/maki/hospital-24.svg', color: 'red'});
+        var routeIcon24 = new MakiIcon24({iconUrl: 'static/css/images/maki/triangle-stroked-24.svg'});
+        var schoolIcon24 = new MakiIcon24({iconUrl: 'static/css/images/maki/school-24.svg'});
+        var soccerIcon24 = new MakiIcon24({iconUrl: 'static/css/images/maki/soccer-24.svg'});
+        var supplyIcon24 = new MakiIcon24({iconUrl: 'static/css/images/maki/grocery-24.svg'});
+        var townIcon24 = new MakiIcon24({iconUrl: 'static/css/images/maki/village-24.svg'});
+        var waterRoadIcon24 = new MakiIcon24({iconUrl: 'static/css/images/maki/roadblock-24.svg'});
+        var waterIcon24 = new MakiIcon24({iconUrl: 'static/css/images/maki/water-24.svg'});
+    
         
-                var Esri_WorldTopoMap = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-	                attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, and the GIS User Community'
-                }).addTo(map);
-                /*
-                var cloudmade = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                    attribution: 'Map data OpenStreetMap contributors'
-                }).addTo(map);
-                */
         
-                // control that shows state info on hover
-                var info = L.control();
+        var map = L.map('map').setView([15.27623, -87.32515], 11);
+    
+        var Esri_WorldTopoMap = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, and the GIS User Community'
+        }).addTo(map);
+        /*
+        var cloudmade = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data OpenStreetMap contributors'
+        }).addTo(map);
+        */
+    
+        // control that shows state info on hover
+        var info = L.control();
+    
+        info.onAdd = function (map) {
+            this._div = L.DomUtil.create('div', 'info');
+            this.update();
+            return this._div;
+        };
+    
+        info.update = function (props) {
+            this._div.innerHTML = '<h4>Communities</h4>' +  (props ?
+                '<utf8sans><b>' + props.ADM2 + '</b></utf8sans><br />' + props.ADM1
+                 + '<br /><i>Click to view more information</i>'
+                : 'Hover over a community');
+        };
+    
+        info.addTo(map);
         
-                info.onAdd = function (map) {
-                    this._div = L.DomUtil.create('div', 'info');
-                    this.update();
-                    return this._div;
-                };
+        geojson_department = L.geoJson(HN_departments, {
+            style: department_style
+        }).addTo(map);
         
-                info.update = function (props) {
-                    this._div.innerHTML = '<h4>Communities</h4>' +  (props ?
-                        '<utf8sans><b>' + props.ADM2 + '</b></utf8sans><br />' + props.ADM1
-                         + '<br /><i>Click to view more information</i>'
-                        : 'Hover over a community');
-                };
+        geojson_admin = L.geoJson(HN_administrative_areas, {
+            style: admin_style,
+            onEachFeature: onEachFeature
+        }).addTo(map);
         
-                info.addTo(map);
-                
-                geojson_department = L.geoJson(HN_departments, {
-                    style: department_style
-                }).addTo(map);
-                
-                geojson_admin = L.geoJson(HN_administrative_areas, {
-                    style: admin_style,
-                    onEachFeature: onEachFeature
-                }).addTo(map);
-                
-                
-
-
-                L.geoJson(GPS_waypoints_MS_2007, {
-                    onEachFeature: onEachWayPoint,
-                    pointToLayer: function (feature, latlng) {
-                        switch (feature.properties.Type) {
-                            case 'Gas': 
-                                var customIcon = gasIcon24;
-                                break;
-                            case 'House': 
-                                var customIcon = houseIcon24;
-                                break;
-                            case 'Medical': 
-                                var customIcon = medicalIcon24;
-                                break;
-                            case 'Route': 
-                                var customIcon = routeIcon24;
-                                break;
-                            case 'School': 
-                                var customIcon = schoolIcon24;
-                                break;
-                            case 'Soccer': 
-                                var customIcon = soccerIcon24;
-                                break;
-                            case 'Supplies': 
-                                var customIcon = supplyIcon24;
-                                break;
-                            case 'Town': 
-                                var customIcon = townIcon24;
-                                break;
-                            case 'Water over road': 
-                                var customIcon = waterRoadIcon24;
-                                break;
-                            case 'Water Source': 
-                                var customIcon = waterIcon24;
-                                break;
-                            default:
-                                 var customIcon = defaultIcon12;
-                        }
-                        return L.marker(latlng, {icon: customIcon});
-                    }
-                }).addTo(map);
-                
-                
-                
-                
-
         
-                map.attributionControl.addAttribution('<a href="http://www.ewb.neu.edu">EWB-NEU</a>'); 
-            </script>    
-        <footer>
-        <p>
-        Data compiled from:
-        <ul>
-            <li>County data: <a href="ftp://ftp2.census.gov/geo/pvs/tiger2010st/" target="_blank"> U.S. Census Bureau</a></li>
-            <li>Hospital data: <a href="https://data.medicare.gov/Hospital-Compare/Hospital-General-Information/v287-28n3" target="_blank">Medicare.gov</a></li>
-            <li>Base Maps: <a href="http://www.openstreetmap.org/" target="_blank"> Open Street Maps </a></li>
-        </ul>
-                &copy; 2013 <a href="http://www.ethanlarochelle.com" target="_blank">Ethan LaRochelle </a>
-        </p>
-        </footer>
-    </div>
-    <!-- End Wrapper -->	
-</body>
-</html>
+    
+    
+        L.geoJson(GPS_waypoints_MS_2007, {
+            onEachFeature: onEachWayPoint,
+            pointToLayer: function (feature, latlng) {
+                switch (feature.properties.Type) {
+                    case 'Gas': 
+                        var customIcon = gasIcon24;
+                        break;
+                    case 'House': 
+                        var customIcon = houseIcon24;
+                        break;
+                    case 'Medical': 
+                        var customIcon = medicalIcon24;
+                        break;
+                    case 'Route': 
+                        var customIcon = routeIcon24;
+                        break;
+                    case 'School': 
+                        var customIcon = schoolIcon24;
+                        break;
+                    case 'Soccer': 
+                        var customIcon = soccerIcon24;
+                        break;
+                    case 'Supplies': 
+                        var customIcon = supplyIcon24;
+                        break;
+                    case 'Town': 
+                        var customIcon = townIcon24;
+                        break;
+                    case 'Water over road': 
+                        var customIcon = waterRoadIcon24;
+                        break;
+                    case 'Water Source': 
+                        var customIcon = waterIcon24;
+                        break;
+                    default:
+                         var customIcon = defaultIcon12;
+                }
+                return L.marker(latlng, {icon: customIcon});
+            }
+        }).addTo(map);
+        
+        
+        
+        
+    
+    
+        map.attributionControl.addAttribution('<a href="http://www.ewb.neu.edu">EWB-NEU</a>'); 
+    </script>  
+{% endblock %}
 
