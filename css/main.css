@@ -1,0 +1,96 @@
+/************************************* General Styles *************************************/
+body {
+     font-family: "Lucida Grande","Arial Unicode MS", sans-serif;
+     font-size: 11px;
+}
+#wrapper { 
+     margin: 0 auto;
+     width: 90%;
+     background: #FFFFFF;
+
+}
+#header {
+     color: #003366;
+     width: 100%;
+     float: left;
+     padding: 5px 0px 10px 5px;
+     border: 0px solid #ccc;
+     height: 50px;
+     margin: 0px 0px 0px 0px;
+     background: #FFFFFF;
+}
+#header h1 {
+    font-size: 28px;
+}
+footer { 
+     width: 100%;
+     clear: both;
+     color: #000000;
+     border-top: 1px solid #003366;
+     background: #CCCCCC;
+     margin: 10px 0px 10px 0px;
+     padding: 0px;
+}
+/************************************* Map Styles *************************************/
+#map {
+    width: 100%;
+    height: 500px;
+}
+
+.info {
+    padding: 6px 8px;
+    font: 14px/16px "Lucida Grande","Arial Unicode MS", sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+.info h4 {
+    margin: 0 0 5px;
+    color: #777;
+}
+
+.legend {
+    text-align: left;
+    line-height: 18px;
+    color: #555;
+}
+.legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.7;
+}
+/************************************* Table Styles *************************************/
+#Hospitals
+{
+    font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+    width: 100%;
+    border-collapse:collapse;
+    font-size: 13px;
+}
+#Hospitals caption 
+{
+    font-size: 28px;
+}
+#Hospitals td, #Hospitals th 
+{
+    font-size:1em;
+    border:1px solid #CCCCCC;
+    padding:3px 7px 2px 7px;
+}
+#Hospitals th 
+{
+    font-size:1.1em;
+    text-align:left;
+    padding-top:5px;
+    padding-bottom:4px;
+    background-color:#003366;
+    color:#ffffff;
+}
+#Hospitals tr.alt td 
+{
+    color:#000000;
+    background-color:#CCCC99;
+}
